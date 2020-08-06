@@ -15,7 +15,7 @@ export default function App() {
   const [seasons, setSeasons] = useState([]);
   const [selectedSeason, setSelectedSeason] = useState("");
   const episodes = seasons[selectedSeason] || [];
-  const [search, setSearch] = useState('Lost')
+  const [search, setSearch] = useState('')
 
   useEffect(() => {
 
@@ -23,6 +23,7 @@ export default function App() {
       .then(res => {
         setShow(res.data);
         setSeasons(formatSeasons(res.data._embedded.episodes));
+        setSelectedSeason('')
       })
       .catch(err => {
         setShow(null)
@@ -34,7 +35,10 @@ export default function App() {
   };
 
   if (!show) {
-    return <h2>Fetching data...</h2>;
+    return <div className='App'>
+      <Search set={setSearch} />
+      <h2>No Show yet, Search for one!</h2>
+    </div>;
   }
 
   return (
