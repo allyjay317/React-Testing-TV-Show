@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import Dropdown from "react-dropdown";
 import parse from "html-react-parser";
 
@@ -9,21 +8,26 @@ import { formatSeasons } from "./utils/formatSeasons";
 
 import Episodes from "./components/Episodes";
 import "./styles.css";
+import Search from "./components/Search";
 
 export default function App() {
   const [show, setShow] = useState(null);
   const [seasons, setSeasons] = useState([]);
   const [selectedSeason, setSelectedSeason] = useState("");
   const episodes = seasons[selectedSeason] || [];
+  const [search, setSearch] = useState('Lost')
 
   useEffect(() => {
 
-    fetchShow()
+    fetchShow(search)
       .then(res => {
         setShow(res.data);
         setSeasons(formatSeasons(res.data._embedded.episodes));
-      });
-  }, []);
+      })
+      .catch(err => {
+        setShow(null)
+      })
+  }, [search]);
 
   const handleSelect = e => {
     setSelectedSeason(e.value);
@@ -35,6 +39,7 @@ export default function App() {
 
   return (
     <div className="App">
+      <Search set={setSearch} />
       <img className="poster-img" src={show.image.original} alt={show.name} />
       <h1>{show.name}</h1>
       <div data-testid='summary'>{parse(show.summary)}</div>

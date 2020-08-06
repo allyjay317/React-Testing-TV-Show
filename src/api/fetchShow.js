@@ -1,9 +1,9 @@
 import axios from 'axios'
 
-export const fetchShow = () => {
+export const fetchShow = (show) => {
   return axios
     .get(
-      "https://api.tvmaze.com/singlesearch/shows?q=stranger-things&embed=episodes"
+      `https://api.tvmaze.com/singlesearch/shows?q=${show.replace(' ', '-')}&embed=episodes`
     )
     .then(res => {
       console.log(res)
